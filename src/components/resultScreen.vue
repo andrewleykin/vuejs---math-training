@@ -1,0 +1,31 @@
+<template>
+	<div class="alert alert-primary">
+		<h3>Success: {{ stats.success }}</h3>
+		<h3>Error: {{ stats.error }}</h3>
+		<hr>
+		<button class="btn btn-primary" @click="$emit('repeat')">
+			Repeat
+		</button>
+		<button class="btn btn-primary" @click="$emit('nextLevel')">
+			Next Level
+		</button>
+		<button class="btn btn-primary" 
+			v-if="level>=1"
+			@click="$emit('prevLevel')"
+		>
+			Prev Level
+		</button>
+	</div>
+</template>
+
+<script>
+	export default {
+		props: ['stats', 'level']
+	}
+</script>
+
+<style>
+	.btn {
+		margin: 20px 0;
+	}
+</style>
