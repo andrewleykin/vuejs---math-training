@@ -30,13 +30,17 @@
           v-else-if="state == 'result'"
           :stats="stats"
           :level="level"
+          :length="levels.length"
+          :settings="levels[level]"
+          :type="message.type"
           @repeat = "onStart"
           @nextLevel = "onNextLevel"
           @prevLevel = "onPrevLevel"
+          @repeatTraining = "onRepeatTraining"
         >
         </app-result-screen>
         <div v-else>Unknown state</div>
-      </transition>
+      </transition> <!-- Конец transition -->
     </div> <!-- Конец .box -->
   </div> <!-- Конец .training -->
 </template>
@@ -77,6 +81,13 @@ export default {
           range: 40,
           questionMax: 4,
           variants: 6
+        },
+        {
+          from: 1000,
+          to: 1800,
+          range: 30,
+          questionMax: 5,
+          variants: 7
         }
       ]
     }
@@ -89,6 +100,9 @@ export default {
       return {
         width: (this.questionDone / this.levels[this.level].questionMax * 100) + '%'
       };
+    },
+    levelsLength(){
+      return this.levels.length;
     }
   },
   methods: {
@@ -117,11 +131,19 @@ export default {
       }
     },
     onNextLevel(){
-      this.level++;
+      if(this.level == this.levelsLength - 1) {
+        this.level = 0;
+      }  else {
+        this.level++;
+      }
       this.onStart();
     },
     onPrevLevel(){
       this.level--;
+      this.onStart();
+    },
+    onRepeatTraining(){
+      this.level = 0;
       this.onStart();
     }
   }
@@ -138,15 +160,10 @@ export default {
     margin: 10px 0;
   }
 
-  .flip-enter {
-    
-  }
   .flip-enter-active {
     animation: flipInX .3s linear;
   }
-  .flip-leave{
-    
-  }
+
   .flip-leave-active {
     animation: flipOutX .3s linear;
   }
